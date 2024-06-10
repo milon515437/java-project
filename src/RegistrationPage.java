@@ -164,8 +164,7 @@ public class RegistrationPage extends JFrame {
         final String USERNAME = "root";  // Replace with your DB username
         final String PASSWORD = "";      // Replace with your DB password
 
-        try {
-            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
             String sql = "INSERT INTO user (name, email, phone, address, password) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, name);
@@ -175,9 +174,6 @@ public class RegistrationPage extends JFrame {
             preparedStatement.setString(5, password);
 
             int rowsInserted = preparedStatement.executeUpdate();
-            preparedStatement.close();
-            conn.close();
-
             return rowsInserted > 0;
         } catch (SQLException e) {
             System.out.println("Database connection failed: " + e.getMessage());
